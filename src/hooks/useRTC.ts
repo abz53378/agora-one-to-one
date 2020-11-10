@@ -1,5 +1,6 @@
 import { Stream } from 'agora-rtc-sdk';
 import { useState, useRef } from 'react';
+import { message } from 'antd';
 import RTC from '../utils/rtc';
 
 
@@ -11,27 +12,28 @@ export type RTCPayload = {
   leave: RTC['leave'],
   playStream: RTC['playStream'],
   closeStream: RTC['closeStream'],
-  localStreamId: string,
-  remoteStreamIds: Array<string>,
+  localStream: Stream | null,
+  remoteStreams: Array<Stream>,
 };
 
 export default function useRTC() {
   const [
-    localStreamId,
-    setLocalStreamId,
-  ] = useState<string | number | null>(null);
+    localStream,
+    setLocalStream,
+  ] = useState<Stream | null>(null);
   const [
-    remoteStreamIds,
-    setRemoteStreamIds,
-  ] = useState<Array<string | number>>([]);
+    remoteStreams,
+    setRemoteStreams,
+  ] = useState<Array<Stream>>([]);
   const onRemoteStreamChanged = (streams: Array<Stream>) => {
-    const ids = streams.map(stream => stream.getId());
-    setRemoteStreamIds(ids);
+    setRemoteStreams(streams);
   };
   const onLocalStreamChanged = (stream: Stream | null) => {
-    setLocalStreamId(stream ? stream.getId() : null);
+    setLocalStream(stream);
   };
-  const rtc = useRef(new RTC()).current;
+  const rtc = useRef(new RTC({
+    messageHandler: message,
+  })).current;
   rtc.onRemoteStreamChanged = onRemoteStreamChanged;
   rtc.onLocalStreamChanged = onLocalStreamChanged;
   return [{
@@ -42,7 +44,7 @@ export default function useRTC() {
     leave: rtc.leave,
     playStream: rtc.playStream,
     closeStream: rtc.closeStream,
-    localStreamId,
-    remoteStreamIds,
+    localStream,
+    remoteStreams,
   }];
 }

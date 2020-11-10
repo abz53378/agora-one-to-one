@@ -21,16 +21,15 @@ const layout = {
 export default function Setting(props: Props) {
   const { join, publish, leave, unpublish } = props;
   const onFinish = (values: RTCPayload['params']) => {
-    console.log(values);
-    join(values);
+    join(values).catch(console.log);
   };
   return (
     <Card bordered style={{ margin: 24 }}>
       <Form {...layout} onFinish={onFinish}>
         <BasicSettingForm
-          onLeave={leave}
-          onPublish={publish}
-          onUnpublish={unpublish}
+          onLeave={() => leave().catch(console.log)}
+          onPublish={() => publish().catch(console.log)}
+          onUnpublish={() => unpublish().catch(console.log)}
         />
         <Collapse style={{}}>
           <Panel forceRender key="advancedSetting" header="Advanced Setting">

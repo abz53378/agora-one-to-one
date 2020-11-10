@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout, Row, Col } from 'antd';
 import Setting from './components/Setting';
 import useRTC from './hooks/useRTC';
@@ -13,12 +13,11 @@ function App() {
     publish,
     leave,
     unpublish,
-    localStreamId,
-    remoteStreamIds,
+    localStream,
+    remoteStreams,
     playStream,
     closeStream,
   }] = useRTC();
-
   return (
     <Layout className="layout">
       <Header className="header">
@@ -36,10 +35,10 @@ function App() {
           </Col>
           <Col span={12}>
             {
-              [localStreamId, ...remoteStreamIds].map(id => (
-                <View
-                  key={id}
-                  streamId={id}
+              [localStream, ...remoteStreams].map(stream => (
+                stream && <View
+                  key={stream.getId()}
+                  stream={stream}
                   playStream={playStream}
                   closeStream={closeStream}
                 />
@@ -48,7 +47,6 @@ function App() {
 
           </Col>
         </Row>
-
       </Content>
       <Footer>Created by Leo</Footer>
     </Layout>

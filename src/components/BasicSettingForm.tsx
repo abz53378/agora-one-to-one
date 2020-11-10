@@ -1,13 +1,11 @@
 import React from 'react';
-import { Form, Input, Button, Switch } from 'antd';
+import { Form, Input, Button } from 'antd';
 
 type Props = {
   onLeave: () => void;
   onPublish: () => void;
   onUnpublish: () => void;
 };
-
-
 
 function BasicSettingForm(props: Props) {
   const {
@@ -31,19 +29,16 @@ function BasicSettingForm(props: Props) {
           <Button type="primary" htmlType="submit">
             JOIN
           </Button>
-          <Button type="primary" onClick={() => onLeave()}>
+          <Button type="primary" onClick={onLeave}>
             LEAVE
           </Button>
-          <Button type="primary" onClick={() => onPublish()}>
+          <Button type="primary" onClick={onPublish}>
             PUBLISH
           </Button>
-          <Button type="primary" onClick={() => onUnpublish()}>
+          <Button type="primary" onClick={onUnpublish}>
             UNPUBLISH
           </Button>
         </Button.Group>
-      </Form.Item>
-      <Form.Item label="Show Profile">
-        <Switch />
       </Form.Item>
     </>
   );
